@@ -1,4 +1,4 @@
 CCMTM
 =====
 
-{cleaner, extractor, LM generator} for the Common Crawl data. Created on the Machine Translation Marathon 2013
+Scripts to extract useful data from the Common Crawl data set. Created on the Machine Translation Marathon 2013
