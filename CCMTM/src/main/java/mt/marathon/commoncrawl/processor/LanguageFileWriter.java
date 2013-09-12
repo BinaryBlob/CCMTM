@@ -26,12 +26,14 @@ public class LanguageFileWriter implements EntryProcessor {
     private final Map<String, Writer> writers = new HashMap<String, Writer>();
     private final String outputDirectory;
     private final String filePrefix;
+    private boolean printUrls;
 
-    public LanguageFileWriter(String outputDirectory, String filePrefix) {
+    public LanguageFileWriter(String outputDirectory, String filePrefix, boolean printUrls) {
         File directory = new File(outputDirectory);
         directory.mkdirs();
         this.filePrefix = filePrefix;
         this.outputDirectory = outputDirectory;
+        this.printUrls = printUrls;
     }
 
     public List<Entry> process(Entry entry) throws IOException {
@@ -47,8 +49,8 @@ public class LanguageFileWriter implements EntryProcessor {
         } else {
             writer = writers.get(lang);
         }
-
-        writer.append(MAGIC_NUMBER)
+        if(printUrls) {
+          writer.append(MAGIC_NUMBER)
                 .append("\t")
                 .append(entry.getLangId())
                 .append("\t")
@@ -57,7 +59,11 @@ public class LanguageFileWriter implements EntryProcessor {
                 .append(entry.getKey())
                 .append("\n")
                 .append(entry.getValue())
-                .append("\n");
+                .append("\n");          
+        } else {
+             writer.append(entry.getValue()).append("\n");
+        }
+
         return null;
     }
 

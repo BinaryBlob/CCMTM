@@ -6,11 +6,9 @@ import mt.marathon.commoncrawl.processor.EntryProcessor;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import mt.marathon.commoncrawl.processor.StanfordCoreNLPTokenizer;
-import org.apache.commons.cli.BasicParser;
+import mt.marathon.commoncrawl.processor.PageLangWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -30,6 +28,7 @@ import org.apache.hadoop.util.ReflectionUtils;
  *
  */
 public class Extractor {
+
     private EntryProcessor[] processors;
 
     public Extractor(EntryProcessor[] processors) {
@@ -59,38 +58,47 @@ public class Extractor {
         options.addOption("i", "input", true, "input file");
         options.addOption("l", "languages", true, "list of languages to extract (comma separated)");
         options.addOption("o", "output", true, "output directory");
+        options.addOption("f", "format", true, "output format: 1 - one file per web page , 2 - one file for all pages");        
+        options.addOption("u", "urls", false, "print url address in the first line");
         return options;
     }
-    
+
     private static CommandLine readOptions(String[] args) throws ParseException {
         Options options = getOptions();
         CommandLineParser parser = new GnuParser();
         CommandLine cmd = parser.parse(options, args);
-        if (cmd.hasOption("h")) {
+        if (cmd.hasOption("h") || args.length == 0) {
             // automatically generate the help statement
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("jara -jar <lib>.jar [Options]", options);
             System.exit(0);
         }
         return cmd;
-    }    
+    }
 
     public static void main(String[] args) throws IOException, ParseException, Exception {
         CommandLine cmd = readOptions(args);
         String inputFile = cmd.getOptionValue("i");
         String languages = cmd.getOptionValue("l");
         String outputDirectory = cmd.getOptionValue("o");
+        String format = cmd.getOptionValue("f", "1");       
         String inputFileName = inputFile.replaceAll("(/[^/]+)*/", "").replaceAll("[.].*", "");
-        
+        boolean printUrls = cmd.hasOption("u");
+
         long start = System.currentTimeMillis();
         long pages = 0;
-        
+
+        EntryProcessor writer = new PageLangWriter(outputDirectory, inputFileName, printUrls);
+        if(cmd.hasOption("f")) {
+            if(cmd.getOptionValue("f").equals("2")) writer = new LanguageFileWriter(outputDirectory, inputFileName, printUrls);
+        }
         EntryProcessor[] processors = {
             //new NoiseFilter(),
             //new ParagraphExtractor(),
             new LangId(languages),
             //new Printer(),
-            new LanguageFileWriter(outputDirectory, inputFileName),
+            
+            writer, 
 //            new StanfordCoreNLPTokenizer(),
         };
         final Extractor extractor = new Extractor(processors);
