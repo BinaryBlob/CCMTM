@@ -89,7 +89,7 @@ public class Extractor {
         String format = cmd.getOptionValue("f", "1");       
         String inputFileName = inputFile.replaceAll("(/[^/]+)*/", "").replaceAll("[.].*", "");
         boolean printUrls = cmd.hasOption("u");
-        boolean tokenizeSenteces = cmd.hasOption("u");
+        boolean tokenizeSenteces = cmd.hasOption("t");
 
         long start = System.currentTimeMillis();
         long pages = 0;
