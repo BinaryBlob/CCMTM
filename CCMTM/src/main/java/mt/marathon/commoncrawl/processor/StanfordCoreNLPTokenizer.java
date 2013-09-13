@@ -4,8 +4,6 @@
  */
 package mt.marathon.commoncrawl.processor;
 
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import mt.marathon.commoncrawl.processor.EntryProcessor;
 import java.util.List;
 import mt.marathon.commoncrawl.Entry;
 
