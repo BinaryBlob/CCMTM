@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import mt.marathon.commoncrawl.processor.PageLangWriter;
+import mt.marathon.commoncrawl.processor.ParagraphExtractor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -94,7 +95,7 @@ public class Extractor {
         }
         EntryProcessor[] processors = {
             //new NoiseFilter(),
-            //new ParagraphExtractor(),
+            new ParagraphExtractor(),
             new LangId(languages),
             //new Printer(),
             

@@ -33,3 +33,12 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+/CCMTM/nbactions.xml
+/CCMTM/target/
+backblue.gif
+fade.gif
+hts-cache/
+hts-in_progress.lock
+hts-log.txt
+index.html
+www.statmt.org/

@@ -19,22 +19,20 @@ public class ParagraphExtractor implements EntryProcessor {
 
     public List<Entry> process(Entry entry) {
         Scanner valueScanner = new Scanner(entry.getValue());
-        List<Entry> paragraphs = new ArrayList<Entry>();
-//        StringBuilder builder = new StringBuilder();
-//        while (valueScanner.hasNextLine()) {
-//            String line = valueScanner.nextLine();
-//            if (line.matches(PARA_PATTERN)) {
-//                builder.append(line).append(" ");
-//            } else if (line.matches("\\p{Z}+")) {
-//                //skip
-//            } else {
-//                builder.append(line).append("\n");
-//            }
-//
-//        }
-//        entry.setValue(builder.toString());
-//        paragraphs.add(entry);
-        return paragraphs;
+        StringBuilder builder = new StringBuilder();
+        while (valueScanner.hasNextLine()) {
+            String line = valueScanner.nextLine();
+            if (line.matches(PARA_PATTERN)) {
+                builder.append(line).append(" ");
+            } else if (line.matches("\\p{Z}+")) {
+                //skip
+            } else {
+                builder.append(line).append("\n");
+            }
+
+        }
+        entry.setValue(builder.toString());
+        return null;
     }
 
     /**
@@ -42,7 +40,7 @@ public class ParagraphExtractor implements EntryProcessor {
      * @return
      */
     public boolean isMapper() {
-        return true;
+        return false;
     }
 
     public void close() throws Exception {
